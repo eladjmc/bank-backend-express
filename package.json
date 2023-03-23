@@ -1,0 +1,24 @@
+{
+	"name": "shops-api",
+	"version": "1.0.0",
+	"description": "Virtual mall api",
+	"main": "server.js",
+	"type": "module",
+	"scripts": {
+		"start": "node server.js",
+		"dev": "nodemon server.js"
+	},
+	"author": "Ori Baram",
+	"license": "MIT",
+	"devDependencies": {
+		"colors": "^1.4.0"
+	},
+	"dependencies": {
+		"dotenv": "^16.0.3",
+		"express": "^4.18.2",
+		"mongoose": "^7.0.2",
+		"morgan": "^1.10.0",
+		"nodemon": "^2.0.21",
+		"slugify": "^1.6.5"
+	}
+}
