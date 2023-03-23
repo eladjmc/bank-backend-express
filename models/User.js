@@ -11,6 +11,8 @@ const UserSchema = new mongoose.Schema({
   slug: String,
   email: {
     type: String,
+    unique: [true, "Email already exist"],
+    required: [true, 'Please add a Email'],
     match: [
       /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
       'Please add a valid email'
@@ -18,19 +20,28 @@ const UserSchema = new mongoose.Schema({
   },
   age: {
     type: Number,
+    required: [true, 'Please Insert Age'],
     min: [18,"You need to be over 18 to open an account"]
   },
   userID: {
     type: String,
-    maxlength: [9, 'ID must contain 9 Chars'],
-    minlength: [9, 'ID must contain 9 Chars']
+    required: [true, 'Please Insert your ID'],
+    trim: true,
+    length: [9, 'ID must contain 9 Chars'],
+    match: [/^\d{9}$/,"ID must be only digits"]
   },
   createdAt: {
     type: Date,
     default: Date.now
   },
-  account: {
-     type: [String]
+  credit: {
+    type: Number,
+    min: [0,"Must have money in credit"],
+    default: 0
+  },
+  cash: {
+    type: Number,
+    default: 0
   }
 },
   {
@@ -58,21 +69,6 @@ const UserSchema = new mongoose.Schema({
 UserSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true });
   next();
-});
-
-// Cascade delete account when a user is deleted
-UserSchema.pre('deleteOne', { document: true, query: false }, async function (next) {
-  console.log(`account being removed from user ${this._id}`);
-  await this.model('Account').deleteMany({ user: this._id });
-  next();
-});
-
-// Reverse populate with virtuals
-UserSchema.virtual('accounts', {
-  ref: 'Account',
-  localField: '_id',
-  foreignField: 'user',
-  justOne: false
 });
 
 export default mongoose.model('User', UserSchema);

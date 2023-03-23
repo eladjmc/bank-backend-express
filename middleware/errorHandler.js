@@ -2,7 +2,7 @@ import ErrorResponse from '../utils/ErrorResponse.js';
 
 const errorHandler = (error, req, res, next) => {
   let err = { ...error };
-
+  console.log(error);
   err.message = error.message;
 
   console.log(error.stack.red);

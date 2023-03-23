@@ -1,24 +1,23 @@
-import express from 'express';
+import express from "express";
 import {
   getUsers,
   createUser,
-} from '../controllers/usersController.js';
-// import advancedResults from '../middleware/advancedResults.js';
-// import Shop from '../models/Shop.js';
-
+  deleteUser,
+  getUser,
+  getUserByQuery,
+  updateBalance,
+} from "../controllers/usersController.js";
 
 // Include other resource routers
 const router = express.Router();
 
+router.route("/").get(getUsers).post(createUser);
 
-router
-  .route('/').get(getUsers).post(createUser);
-  // .get(advancedResults(Shop, 'products'), getUsers)
+router.route("/getUserByQuery").get(getUserByQuery);
 
-router
-  .route('/:id')
-  .get(getShop)
-  .put(updateShop)
-  .delete(deleteShop);
+router.route("/updateBalance/:id").put(updateBalance);
+
+router.route("/:id").delete(deleteUser).get(getUser);
+
 
 export default router;
