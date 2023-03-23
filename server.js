@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import colors from 'colors';
 import morgan from 'morgan';
 
+import accounts from './routes/accountsRoutes.js';
 import users from './routes/usersRoutes.js';
 
 import errorHandler from './middleware/errorHandler.js';
@@ -21,6 +22,8 @@ app.use(express.json());
 if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'));
 }
+
+app.use('/api/v1/accounts', accounts);
 
 app.use('/api/v1/users', users);
 

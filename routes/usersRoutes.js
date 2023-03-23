@@ -1,23 +1,22 @@
 import express from "express";
+
 import {
-  getUsers,
-  createUser,
-  deleteUser,
-  getUser,
-  getUserByQuery,
-  updateBalance,
+    getUsers,
+    createUser,
+    getUser,
+    deleteUser,
+    getUserByQuery,
+
 } from "../controllers/usersController.js";
 
-// Include other resource routers
-const router = express.Router();
+// import advancedResults from '../middleware/advancedResults.js';
+
+const router = express.Router({ mergeParams: true });
 
 router.route("/").get(getUsers).post(createUser);
 
 router.route("/getUserByQuery").get(getUserByQuery);
 
-router.route("/updateBalance/:id").put(updateBalance);
-
-router.route("/:id").delete(deleteUser).get(getUser);
-
+router.route("/:id").get(getUser).delete(deleteUser);
 
 export default router;
