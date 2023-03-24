@@ -42,4 +42,34 @@ const AccountSchema = new mongoose.Schema(
   }
 );
 
+// Static method to get the user total balance
+AccountSchema.statics.getTotalBalance = async function (ownerId) {
+  const aggregationArr = await this.aggregate([
+    {
+      // $match stage filters documents to only include those with a matching ownerId
+      $match: { owner: ownerId },
+    },
+    {
+      // $group stage groups the documents by the owner field and calculates the sum of balances
+      $group: {
+        _id: "$owner",
+        totalCash: { $sum: "$cash" },
+        totalCredit: { $sum: "$credit" },
+      },
+    },
+  ]);
+
+  const totalCash = aggregationArr[0].totalCash;
+  const totalCredit = aggregationArr[0].totalCredit;
+  try {
+    await this.model("User").findByIdAndUpdate(ownerId, {
+      totalCash: totalCash,
+      totalCredit: totalCredit,
+    });
+  } catch (err) {
+    console.error(err);
+    throw new Error("Error updating user total balance");
+  }
+};
+
 export default mongoose.model("Account", AccountSchema);

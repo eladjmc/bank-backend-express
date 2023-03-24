@@ -2,12 +2,13 @@ import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema(
   {
-    userID: {
+    passportID: {
       type: String,
       required: [true, "Please Insert your ID"],
       trim: true,
-      length: [9, "ID must contain 9 Chars"],
-      match: [/^\d{9}$/, "ID must be only digits"],
+      length: [9, "passportID must contain 9 Chars"],
+      match: [/^\d{9}$/, "passportID must consist digits only"],
+      unique: true,
     },
     name: {
       type: String,
@@ -17,7 +18,7 @@ const UserSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      unique: [true, "Email already exist"],
+      unique: [true],
       required: [true, "Please add a Email"],
       match: [
         /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
@@ -35,6 +36,15 @@ const UserSchema = new mongoose.Schema(
         ref: "Account",
       },
     ],
+    totalCash: {
+      type: Number,
+      default: 0,
+    },
+    totalCredit: {
+      type: Number,
+      min: [0, "Total credit should be positive only"],
+      default: 0,
+    },
   },
 
   {

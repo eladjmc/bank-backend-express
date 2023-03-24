@@ -7,7 +7,9 @@ import Account from "../models/Account.js";
 // @route   GET /api/v1/users
 // @access  Public
 export const getUsers = asyncHandler(async (req, res, next) => {
-  const users = await User.find();
+  const users = await User.find().populate({
+    path: "accounts",
+  });
   res.status(200).json({ data: users });
 });
 
@@ -37,7 +39,9 @@ export const createUser = asyncHandler(async (req, res, next) => {
 // @route   GET /api/v1/users/:id
 // @access  Public
 export const getUser = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.params.id);
+  const user = await User.findById(req.params.id).populate({
+    path: "accounts",
+  });
 
   if (!user) {
     return next(
@@ -56,8 +60,8 @@ export const getUser = asyncHandler(async (req, res, next) => {
 //@access
 export const getUserByQuery = asyncHandler(async (req, res, next) => {
   const query = req.query;
-  if (!query.hasOwnProperty("email") && !query.hasOwnProperty("userID")) {
-    return next(new ErrorResponse("Params can only be Email/userID"), 401);
+  if (!query.hasOwnProperty("email") && !query.hasOwnProperty("passportID")) {
+    return next(new ErrorResponse("Params can only be Email/passportID"), 401);
   }
   const user = await User.find(query);
   if (!user) {
